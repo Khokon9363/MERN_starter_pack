@@ -8,6 +8,7 @@ const cors = require('cors')
 // Internal dependencies
 const { notFoundMiddleware, defaultErrorMiddleware } = require('./app/http/middlewares/error/errorMiddleware')
 const authRouter = require('./routes/authRouter')
+const sliderRouter = require('./routes/sliderRouter')
 
 // app initialization
 const app = express()
@@ -20,7 +21,8 @@ app.use(cors())
 mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
     useCreateIndex: true,
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 }).then((res) => {
     console.log('Database connected')
 }).catch((err) => {
@@ -38,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 // routes
 app.use('/auth', authRouter)
+app.use('/sliders', sliderRouter)
 
 // 404 error
 app.use(notFoundMiddleware)

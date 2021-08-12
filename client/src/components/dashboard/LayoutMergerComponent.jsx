@@ -17,18 +17,23 @@ export default function LayoutMergerComponent (){
 
     const history = useHistory()
 
+    const setLayoutUser = () => {
+        setUser(Helper.getUserAndToken())
+    }
+
     useEffect(() => {
-        if(!user || !user.token){
-            history.push('/auth/login')
-        }
+        if(!user || !user.token) history.push('/auth/login')
+        if(user.role !== 'Admin') history.push('/')
     }, [user])
     return (
         <>
-            <Layout>
+            <Layout user={user}>
                 <Router>
                     <Switch>
                         <Route exact path="/dashboard" component={DashboardComponent} />
-                        <Route exact path="/dashboard/profile" component={ProfileComponent} />
+                        <Route exact path="/dashboard/profile">
+                            <ProfileComponent setLayoutUser={setLayoutUser} />
+                        </Route>
                         <Route exact path="/dashboard/add-slider" component={AddSliderComponent} />
                         <Route exact path="/dashboard/sliders" component={SlidersComponent} />
                         <Route exact path="/dashboard/add-category" component={AddCategoryComponent} />

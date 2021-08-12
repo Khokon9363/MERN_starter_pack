@@ -1,12 +1,19 @@
-import { Link } from 'react-router-dom'
+import { NavLink as Link } from 'react-router-dom'
 
 function toggleMenu(target) {
     document.querySelector(`.${target}`).classList.toggle('toggled')
 }
 
 function toggleCategory(el, target) {
+    expandAll()
     document.querySelector(`.${el}`).classList.toggle('collapsed')
     document.querySelector(`.${target}`).classList.toggle('show')
+}
+
+function expandAll() {
+    document.querySelectorAll('.collapse').forEach((item) => {
+        item.classList.remove('show')
+    })
 }
 
 export default function SidebarComponent() {
@@ -19,7 +26,7 @@ export default function SidebarComponent() {
                 <div className="sidebar-brand-text mx-3">{process.env.REACT_APP_NAME}</div>
             </Link>
             <li className="nav-item active">
-                <Link className="nav-link" to="/dashboard">
+                <Link className="nav-link" onClick={expandAll} to="/dashboard">
                     <i className="fas fa-fw fa-folder" />
                     <span>Dashboard</span>
                 </Link>
@@ -32,8 +39,8 @@ export default function SidebarComponent() {
                 <div className="collapse collapse-slider">
                     <div className="bg-white py-2 collapse-inner rounded">
                         <h6 className="collapse-header">Slider :</h6>
-                        <Link className="collapse-item" to="/dashboard/add-slider">Add slider</Link>
-                        <Link className="collapse-item active" to="/dashboard/sliders">Sliders</Link>
+                        <Link activeStyle={{color: '#4e73df', fontWeight: '700'}} className="collapse-item" to="/dashboard/add-slider">Add slider</Link>
+                        <Link activeStyle={{color: '#4e73df', fontWeight: '700'}} className="collapse-item" to="/dashboard/sliders">Sliders</Link>
                     </div>
                 </div>
             </li>
@@ -45,8 +52,8 @@ export default function SidebarComponent() {
                 <div className="collapse collapse-category">
                     <div className="bg-white py-2 collapse-inner rounded">
                         <h6 className="collapse-header">Category :</h6>
-                        <Link className="collapse-item" to="/dashboard/add-category">Add category</Link>
-                        <Link className="collapse-item active" to="/dashboard/categories">Categories</Link>
+                        <Link activeStyle={{color: '#4e73df', fontWeight: '700'}} className="collapse-item" to="/dashboard/add-category">Add category</Link>
+                        <Link activeStyle={{color: '#4e73df', fontWeight: '700'}} className="collapse-item" to="/dashboard/categories">Categories</Link>
                     </div>
                 </div>
             </li>
@@ -58,8 +65,8 @@ export default function SidebarComponent() {
                 <div className="collapse collapse-blog">
                     <div className="bg-white py-2 collapse-inner rounded">
                         <h6 className="collapse-header">Blog :</h6>
-                        <Link className="collapse-item" to="/dashboard/add-blog">Add blog</Link>
-                        <Link className="collapse-item active" to="/dashboard/blogs">Blogs</Link>
+                        <Link activeStyle={{color: '#4e73df', fontWeight: '700'}} className="collapse-item" to="/dashboard/add-blog">Add blog</Link>
+                        <Link activeStyle={{color: '#4e73df', fontWeight: '700'}} className="collapse-item" to="/dashboard/blogs">Blogs</Link>
                     </div>
                 </div>
             </li>

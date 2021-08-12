@@ -7,6 +7,7 @@ import '../../../assets/dashboard/vendor/fontawesome-free/css/all.min.css'
 
 export default function Layout(props){
     const dynamicComponent = props.children.props.children
+    
     return (
         <>
             <div>
@@ -17,7 +18,7 @@ export default function Layout(props){
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
 
-                        < TopbarComponent />
+                        < TopbarComponent user={props.user} />
                             { dynamicComponent }
                         </div>
                         

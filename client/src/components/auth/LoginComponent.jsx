@@ -6,7 +6,7 @@ import { login } from '../../api/Auth'
 
 export default function LoginComponent(){
     const [user, setUser] = useState(Helper.getUserAndToken())
-    const [phoneOrEmail, setPhoneOrEmail] = useState('xavegeta@mailinator.com')
+    const [phoneOrEmail, setPhoneOrEmail] = useState('admin@admin.com')
     const [password, setPassword] = useState('12345678')
     const [errors, setErrors] = useState({})
 
@@ -46,13 +46,14 @@ export default function LoginComponent(){
                         <form className="col-sm-5 login-form" onSubmit={loginForm}>
                             <div className="mb-3">
                                 <label htmlFor="phoneOrEmail" className="form-label">Phone or Email address</label>
-                                <input type="text" defaultValue={phoneOrEmail} onClick={(e) => setPhoneOrEmail(e.target.value)} className="form-control" id="phoneOrEmail" />
+                                <input type="text" defaultValue={phoneOrEmail} onChange={(e) => setPhoneOrEmail(e.target.value)} className="form-control" id="phoneOrEmail" />
                                 <small className="text-danger">{(errors.phoneOrEmail && errors.phoneOrEmail.msg) ? errors.phoneOrEmail.msg : ''}</small>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="password" className="form-label">Password</label>
-                                <input type="password" defaultValue={password} onClick={(e) => setPassword(e.target.value)} className="form-control" id="password" />
+                                <input type="password" defaultValue={password} onChange={(e) => setPassword(e.target.value)} className="form-control" id="password" />
                                 <small className="text-danger">{(errors.password && errors.password.msg) ? errors.password.msg : ''}</small>
+                                <small className="text-danger">{ errors.common ?? '' }</small>
                             </div>
                             <button type="submit" className="btn btn-primary">Login</button>
                             <div>

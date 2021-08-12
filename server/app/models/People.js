@@ -33,13 +33,16 @@ const PeopleSchema = mongoose.Schema(
         },
         avatar: {
             type: String,
-            // default: 'nophoto'
         },
-        // role: {
-        //     type: String,
-        //     enum: ['Admin', 'User'],
-        //     default: 'User'
-        // }
+        role: {
+            type: String,
+            enum: ['Admin', 'User'],
+            default: 'User'
+        },
+        status: {
+            type: Boolean,
+            default: true
+        }
     },
     {
         timestamps: true

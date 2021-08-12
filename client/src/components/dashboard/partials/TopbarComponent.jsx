@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import Helper from '../../../Helpers/Helper'
 
@@ -14,8 +14,8 @@ function toggleSidebar(target) {
     document.querySelector(`.${target}`).classList.toggle('toggled')
 }
 
-export default function TopbarComponent(){
-    const [user, setUser] = useState(Helper.getUserAndToken())
+export default function TopbarComponent(props){
+    const [user, setUser] = useState(props.user)
 
     const history = useHistory()
 
@@ -25,6 +25,9 @@ export default function TopbarComponent(){
         history.push('/auth/login')
     }
 
+    useEffect(() => {
+        setUser(props.user)
+    })
     return(
         <>
             <style>

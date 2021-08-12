@@ -27,7 +27,9 @@ async function register(req, res, next) {
                 name: people.name,
                 phone: people.phone,
                 email: people.email,
-                avatar: people.avatar
+                avatar: people.avatar,
+                role: people.role,
+                id: people._id
             }
             // generate jwt token
             const token = jwt.sign(peopleObj, process.env.JWT_SECRET, {
@@ -76,7 +78,10 @@ async function login(req, res, next) {
                 const peopleObj = {
                     name: people.name,
                     phone: people.phone,
-                    email: people.email
+                    email: people.email,
+                    avatar: people.avatar,
+                    role: people.role,
+                    id: people._id
                 }
                 // generate jwt token
                 const token = jwt.sign(peopleObj, process.env.JWT_SECRET, {
@@ -104,14 +109,94 @@ async function login(req, res, next) {
     }
 }
 
-async function me(req, res, next) {
+function me(req, res, next) {
     res.status(200).json({
         user: req.user
     })
 }
 
+async function update(req, res, next){
+    try {
+        const newData = {
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone
+        }
+        if(req.files && req.files.length > 0){
+            newData.avatar = req.files[0].path
+        }
+
+        const people = await People.findOneAndUpdate({
+            id: req.body._id
+        }, newData, { new: true })
+    
+        const peopleObj = {
+            name: people.name,
+            phone: people.phone,
+            email: people.email,
+            avatar: people.avatar,
+            role: people.role,
+            id: people._id
+        }
+        // generate jwt token
+        const token = jwt.sign(peopleObj, process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRY_TIME
+        })
+        if(token){
+            // pass user object as loggedInUser to api client
+            peopleObj.token = token
+            res.status(200).json({
+                user: peopleObj,
+                message: 'Profile updated successfully !'
+            })
+        }else{
+            throw createHttpError('Failed to create token !')
+        }
+    } catch (err) {
+        res.status(500).json({
+            errors: {
+                common: err.message
+            }
+        })
+    }
+}
+
+async function passwordUpdate(req, res, next){
+    try {
+        const people = await People.findById(req.user.id)
+        if(people){
+            const isValidPassword = await bcrypt.compare(req.body.oldPassword, people.password)
+            if(isValidPassword){
+                const hashedPassword = await bcrypt.hash(req.body.newPassword, 10)
+                people.password = hashedPassword
+                if(await people.save()){
+                    delete people.password
+                    res.status(200).json({
+                        user: people,
+                        message: 'Password updated successfully !'
+                    })
+                }else{
+                    throw createHttpError('failed to update password !')
+                }
+            }else{
+                throw createHttpError('Password does not match with our database!')
+            }
+        }else{
+            throw createHttpError('Failed to find user !')
+        }
+    } catch (err) {
+        res.status(500).json({
+            errors: {
+                common: err.message
+            }
+        })
+    }
+}
+
 module.exports = {
     register,
     login,
-    me
+    me,
+    update,
+    passwordUpdate
 }

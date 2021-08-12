@@ -73,7 +73,7 @@ const registerValidator = [
                      .isLength({max: 32})
                      .withMessage('Password field can not contain higher than 32 character.')
                      .trim()
-                     .custom(async (value, {req}) => {
+                     .custom((value, {req}) => {
                             try {
                                 if(req.body.passwordConfirmation.trim() !== value){
                                     throw createHttpError("Password & confirm password does not match !")
